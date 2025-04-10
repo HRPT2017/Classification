@@ -1,17 +1,12 @@
 package com.fpak.classification.rally.cpr;
 import java.util.List;
 import com.fpak.classification.rally.cpr.dtos.CPRDriversDTO;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/api/cpr")
-@CrossOrigin(origins = "*")
-
 public class CPRController {
-    @Value("${cprdrivers.url}")
-    private String cprDriversUrl;
 
     private final CPRService service;
 
@@ -20,7 +15,14 @@ public class CPRController {
     }
 
     @GetMapping("/drivers")
-    public List<CPRDriversDTO> scrapePdfFromUrl() throws Exception {
-        return service.getDriversClassification(cprDriversUrl);
+    public List<CPRDriversDTO> getDriversClassificationg() throws Exception {
+        return service.getDriversClassification();
     }
+
+    @GetMapping("/codrivers")
+    public List<CPRDriversDTO> getCoDriversClassificationg() throws Exception {
+        return service.getCoDriversClassification();
+    }
+
+
 }
