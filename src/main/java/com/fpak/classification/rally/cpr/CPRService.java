@@ -2,15 +2,19 @@ package com.fpak.classification.rally.cpr;
 import java.net.URI;
 import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
+import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
 import com.fpak.classification.rally.RallyService;
+import com.fpak.classification.rally.cpr.dtos.CPRStagePointsDTO;
 import com.fpak.classification.rally.cpr.dtos.CPRDriversDTO;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import technology.tabula.*;
+import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
 
 @Service
@@ -21,39 +25,78 @@ public class CPRService {
         this.rallyService = rallyService;
     }
 
-    public List<CPRDriversDTO> getClassification(String competitionName) throws Exception {
+    @SuppressWarnings("rawtypes")
+    public String readPdf(String competitionName) throws Exception {
         String pdfUrl = rallyService.getCompetition(competitionName);
-        List<CPRDriversDTO> result = new ArrayList<>();
-        List<String> test = new ArrayList<>();
 
         try (InputStream input = URI.create(pdfUrl).toURL().openStream();
-             PDDocument document = PDDocument.load(input)) {
+                PDDocument document = PDDocument.load(input)) {
+            ObjectExtractor oe = new ObjectExtractor(document);
+            Page page = oe.extract(1);
+            SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
+            List<Table> tables = sea.extract(page);
 
-            String text = new PDFTextStripper().getText(document);
+            StringBuilder html = new StringBuilder();
+            html.append("<html><body><table border='1'>");
 
-            Pattern pattern = Pattern.compile("^(\\d{1,2})\\s+(\\d{1,2})\\s+([A-ZÁÉÍÓÚÂÊÔÃÕÇ ]+)\\s+(\\d{1,3})\\s+(\\d{1,3})\\s+(\\d{1,3})", Pattern.MULTILINE);
-            Matcher matcher = pattern.matcher(text);
-            System.out.println(pattern);
-
-            while (matcher.find()) {
-                int position = Integer.parseInt(matcher.group(1));
-                int number = Integer.parseInt(matcher.group(2));
-                String name = matcher.group(3).trim();
-                int total = Integer.parseInt(matcher.group(4));
-                int ps1 = Integer.parseInt(matcher.group(5));
-                int ps2 = Integer.parseInt(matcher.group(6));
-
-                result.add(new CPRDriversDTO(position, number, name, total));
-                test.add( position + ", " + number + "," + name + ", "+ total + ", "+ ps1 + ", " + ps2 + "\n");
+            for (Table table : tables) {
+                for (List<RectangularTextContainer> row : table.getRows()) {
+                    html.append("<tr>");
+                    for (RectangularTextContainer cell : row) {
+                        html.append("<td>").append(cell.getText()).append("</td>");
+                    }
+                    html.append("</tr>");
+                }
             }
-            
-            System.out.println(text);
-            return result;
-        }
 
-        
+            html.append("</table></body></html>");
+            StringWriter content = new StringWriter();
+            content.write(html.toString());
+            // Save HTML
+            System.out.println(content.toString());
+            oe.close();
+            return content.toString();
+            
+        }
     }
-   
+
+    public List<CPRDriversDTO> getClassification(String competitionName) throws Exception {
+        String content = this.readPdf(competitionName);
+        List<CPRDriversDTO> result = new ArrayList<>();
+
+        Document doc = Jsoup.parse(content);
+        Elements rows = doc.select("table tr");
+        
+        List<Element> driverRows = rows.subList(2, rows.size());
+
+        for (Element row : driverRows) {
+            Elements cols = row.select("td");
+
+            if (cols.size() < 4) continue;
+
+            int position = Integer.parseInt(cols.get(0).text().trim());
+            int number = Integer.parseInt(cols.get(1).text().trim());
+            String name = cols.get(2).text().trim();
+            int total = Integer.parseInt(cols.get(3).text());
+
+     
+
+            List<CPRStagePointsDTO> stage = new ArrayList<>();
+
+            // Starting from index 4 (column 5), collect stage data in pairs
+            for (int i = 4, stageNumber = 1; i  < cols.size(); i += 4, stageNumber++) {
+                String powerStage = cols.get(i+1).text().trim();
+                String generalFinal = cols.get(i +3).text().trim();
+
+                stage.add(new CPRStagePointsDTO(String.valueOf(stageNumber), powerStage, generalFinal));
+            }
+
+            result.add(new CPRDriversDTO(position, number, name, total, stage));
+        }
+        return result;
+    }
+    
+
     public List<CPRDriversDTO> getDriversClassification() throws Exception {
         return this.getClassification("C P Ralis 2025 Condutores - Absoluto");
     }
@@ -61,4 +104,5 @@ public class CPRService {
     public List<CPRDriversDTO> getCoDriversClassification() throws Exception {
         return this.getClassification("C P Ralis 2025 Navegadores - Absoluto");
     }
+
 }
