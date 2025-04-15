@@ -1,15 +1,15 @@
-package com.fpak.classification.rally.cpr.dtos;
+package com.fpak.rally.dtos;
 
 import java.util.List;
 
-public class CPRDriversDTO{
+public class CPRAbsDriversDTO{
     private int position;
     private int number;
     private String name;
     private int total;
-    private List<CPRStagePointsDTO> stagePoints;
+    private List<CPRAbsStagePointsDTO> stagePoints ;
 
-    public CPRDriversDTO(int position, int number, String name, int total, List<CPRStagePointsDTO> stagePoints) {
+    public CPRAbsDriversDTO(int position, int number, String name, int total, List<CPRAbsStagePointsDTO> stagePoints) {
         this.position = position;
         this.number = number;
         this.name = name;
@@ -29,6 +29,6 @@ public class CPRDriversDTO{
     public int getTotal() { return total; }
     public void setTotal(int total) { this.total = total; }
 
-    public List<CPRStagePointsDTO> getStagePoints() { return stagePoints; }
-    public void setStagePoints(List<CPRStagePointsDTO> stagePoints) { this.stagePoints = stagePoints; }
+    public List<CPRAbsStagePointsDTO> getStagePoints() { return stagePoints; }
+    public void setStagePoints(List<CPRAbsStagePointsDTO> stagePoints) { this.stagePoints = stagePoints; }
 }
