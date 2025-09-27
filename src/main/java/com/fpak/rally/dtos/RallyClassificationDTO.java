@@ -2,14 +2,14 @@ package com.fpak.rally.dtos;
 
 import java.util.List;
 
-public class CPRAbsDriversDTO{
+public class RallyClassificationDTO {
     private int position;
     private int number;
     private String name;
     private int total;
-    private List<CPRAbsStagePointsDTO> stagePoints ;
+    private List<StagePointsDTO> stagePoints ;
 
-    public CPRAbsDriversDTO(int position, int number, String name, int total, List<CPRAbsStagePointsDTO> stagePoints) {
+    public RallyClassificationDTO(int position, int number, String name, int total, List<StagePointsDTO> stagePoints) {
         this.position = position;
         this.number = number;
         this.name = name;
@@ -29,6 +29,6 @@ public class CPRAbsDriversDTO{
     public int getTotal() { return total; }
     public void setTotal(int total) { this.total = total; }
 
-    public List<CPRAbsStagePointsDTO> getStagePoints() { return stagePoints; }
-    public void setStagePoints(List<CPRAbsStagePointsDTO> stagePoints) { this.stagePoints = stagePoints; }
+    public List<StagePointsDTO> getStagePoints() { return stagePoints; }
+    public void setStagePoints(List<StagePointsDTO> stagePoints) { this.stagePoints = stagePoints; }
 }

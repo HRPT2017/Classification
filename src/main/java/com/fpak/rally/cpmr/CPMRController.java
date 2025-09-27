@@ -1,8 +1,8 @@
 package com.fpak.rally.cpmr;
 import java.util.List;
 
+import com.fpak.rally.dtos.RallyClassificationDTO;
 import org.springframework.web.bind.annotation.*;
-import com.fpak.rally.dtos.CPRAbsDriversDTO;
 
 
 @RestController
@@ -15,12 +15,12 @@ public class CPMRController {
     }
 
     @GetMapping("/absolute/drivers")
-    public List<CPRAbsDriversDTO> getAbsDriversClassification() throws Exception {
+    public List<RallyClassificationDTO> getAbsDriversClassification() throws Exception {
         return service.getAbsDriversClassification();
     }
 
     @GetMapping("/absolute/codrivers")
-    public List<CPRAbsDriversDTO> getAbsCoDriversClassification() throws Exception {
+    public List<RallyClassificationDTO> getAbsCoDriversClassification() throws Exception {
         return service.getAbsCoDriversClassification();
     }
 

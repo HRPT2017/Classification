@@ -1,10 +1,10 @@
 package com.fpak.rally.cpr;
 import java.util.List;
+
+import com.fpak.rally.dtos.RallyClassificationDTO;
 import org.springframework.stereotype.Service;
 
 import com.fpak.rally.RallyService;
-import com.fpak.rally.dtos.CPRAbsDriversDTO;
-import com.fpak.rally.dtos.CPRDriversDTO;
 
 import java.time.Year;
 
@@ -19,20 +19,20 @@ public class CPRService {
 
     //Read All Pdf files based on Competition Name
 
-    public List<CPRAbsDriversDTO> getAbsDriversClassification() throws Exception {
-        return rallyService.getAbsClassification("C P Ralis " + String.valueOf(Year.now().getValue()) + " Condutores - Absoluto");
+    public List<RallyClassificationDTO> getAbsDriversClassification() throws Exception {
+        return rallyService.getClassification("C P Ralis " + Year.now().getValue() + " Condutores - Absoluto","abs");
     }
 
-    public List<CPRAbsDriversDTO> getAbsCoDriversClassification() throws Exception {
-        return rallyService.getAbsClassification("C P Ralis " + String.valueOf(Year.now().getValue()) + " Navegadores - Absoluto");
+    public List<RallyClassificationDTO> getAbsCoDriversClassification() throws Exception {
+        return rallyService.getClassification("C P Ralis " + Year.now().getValue() + " Navegadores - Absoluto","abs");
     }
 
-    public List<CPRDriversDTO> getRally2DriversClassification()throws Exception{
-        return rallyService.getClassification("C P Ralis " + String.valueOf(Year.now().getValue()) + " Condutoress - Rally 2");
+    public List<RallyClassificationDTO> getRally2DriversClassification()throws Exception{
+        return rallyService.getClassification("C P Ralis " + Year.now().getValue() + " Condutores - Rally 2","normal");
     }
 
-    public List<CPRDriversDTO> getRally2CoDriversClassification()throws Exception{
-        return rallyService.getClassification("C P Ralis " + String.valueOf(Year.now().getValue()) + " Navegadores - Rally 2");
+    public List<RallyClassificationDTO> getRally2CoDriversClassification()throws Exception{
+        return rallyService.getClassification("C P Ralis " + Year.now().getValue() + " Navegadores - Rally 2","normal");
     }
 
 }

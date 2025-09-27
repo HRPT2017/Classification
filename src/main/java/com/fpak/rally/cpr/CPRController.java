@@ -1,10 +1,9 @@
 package com.fpak.rally.cpr;
 import java.util.List;
 
+import com.fpak.rally.dtos.RallyClassificationDTO;
 import org.springframework.web.bind.annotation.*;
 
-import com.fpak.rally.dtos.CPRAbsDriversDTO;
-import com.fpak.rally.dtos.CPRDriversDTO;
 
 
 @RestController
@@ -18,22 +17,22 @@ public class CPRController {
     }
 
     @GetMapping("/absolute/drivers")
-    public List<CPRAbsDriversDTO> getAbsDriversClassification() throws Exception {
+    public List<RallyClassificationDTO> getAbsDriversClassification() throws Exception {
         return service.getAbsDriversClassification();
     }
 
     @GetMapping("/absolute/codrivers")
-    public List<CPRAbsDriversDTO> getAbsCoDriversClassification() throws Exception {
+    public List<RallyClassificationDTO> getAbsCoDriversClassification() throws Exception {
         return service.getAbsCoDriversClassification();
     }
 
     @GetMapping("/rally2/drivers")
-    public List<CPRDriversDTO> getRallyDriversClassification() throws Exception {
+    public List<RallyClassificationDTO> getRallyDriversClassification() throws Exception {
         return service.getRally2DriversClassification();
     }
 
     @GetMapping("/rally2/co-drivers")
-    public List<CPRDriversDTO> getRally2CoDriversClassification() throws Exception {
+    public List<RallyClassificationDTO> getRally2CoDriversClassification() throws Exception {
         return service.getRally2CoDriversClassification();
     }
 

@@ -6,8 +6,11 @@ C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\ral
 C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\rally\cpmr\CPMRService.java
 C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\rally\cpr\CPRController.java
 C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\rally\cpr\CPRService.java
-C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\rally\dtos\CPRAbsDriversDTO.java
-C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\rally\dtos\CPRAbsStagePointsDTO.java
-C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\rally\dtos\CPRDriversDTO.java
-C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\rally\dtos\CPRStagePointsDTO.java
+C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\rally\dtos\RallyClassificationDTO.java
+C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\rally\dtos\StagePointsDTO.java
 C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\rally\RallyService.java
+C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\velocity\cpvl\CPVLController.java
+C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\velocity\cpvl\CPVLService.java
+C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\velocity\dtos\RacePointsDTO.java
+C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\velocity\dtos\VelocityClassificationDTO.java
+C:\Users\hugo1\Desktop\Stuff\Something\Classification\src\main\java\com\fpak\velocity\VelocityService.java

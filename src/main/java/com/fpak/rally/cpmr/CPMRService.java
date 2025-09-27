@@ -2,11 +2,12 @@ package com.fpak.rally.cpmr;
 
 import java.time.Year;
 import java.util.List;
+import com.fpak.rally.dtos.RallyClassificationDTO;
 
 import org.springframework.stereotype.Service;
 
 import com.fpak.rally.RallyService;
-import com.fpak.rally.dtos.CPRAbsDriversDTO;
+
 
 @Service
 public class CPMRService {
@@ -18,12 +19,12 @@ public class CPMRService {
 
     //Read All Pdf files based on Competition Name
 
-    public List<CPRAbsDriversDTO> getAbsDriversClassification() throws Exception {
-        return rallyService.getAbsClassification("C P Masters Ralis " + String.valueOf(Year.now().getValue()) + " Condutores - Absoluto");
+    public List<RallyClassificationDTO> getAbsDriversClassification() throws Exception {
+        return rallyService.getClassification("C P Masters Ralis " + Year.now().getValue() + " Condutores - Absoluto","abs");
     }
 
-    public List<CPRAbsDriversDTO> getAbsCoDriversClassification() throws Exception {
-        return rallyService.getAbsClassification("C P Masters Ralis " + String.valueOf(Year.now().getValue()) + " Navegadores - Absoluto");
+    public List<RallyClassificationDTO> getAbsCoDriversClassification() throws Exception {
+        return rallyService.getClassification("C P Masters Ralis " + Year.now().getValue() + " Navegadores - Absoluto","abs");
     }
 
 }

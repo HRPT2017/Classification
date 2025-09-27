@@ -1,14 +1,9 @@
-package com.fpak.rally;
+package com.fpak.velocity;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.fpak.rally.RallyService;
+import com.fpak.rally.dtos.RallyClassificationDTO;
+import com.fpak.rally.dtos.StagePointsDTO;
+import com.fpak.velocity.dtos.VelocityClassificationDTO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,26 +11,27 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import technology.tabula.ObjectExtractor;
+import technology.tabula.Page;
+import technology.tabula.RectangularTextContainer;
+import technology.tabula.Table;
+import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
+
+import java.io.*;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-import com.fpak.rally.dtos.RallyClassificationDTO;
-import com.fpak.rally.dtos.StagePointsDTO;
-
-import technology.tabula.ObjectExtractor;
-import technology.tabula.RectangularTextContainer;
-import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
-import technology.tabula.*;
-
 @Service
-public class RallyService {
+public class VelocityService {
 
-    @Value("${rally.url}")
+    @Value("${velocity.url}")
     private String rallyUrl;
 
-    private static final Logger LOGGER = Logger.getLogger(RallyService.class.getName());
-    
+    private static final Logger LOGGER = Logger.getLogger(VelocityService.class.getName());
+
     public String getCompetition(String urlName) throws IOException {
         Document doc = Jsoup.connect(rallyUrl).get();
         // Find all PDF links inside the correct HTML scope
@@ -44,7 +40,7 @@ public class RallyService {
         for (Element link : links) {
             String text = link.text().trim();
             if (text.equalsIgnoreCase(urlName)) {
-               pdfUrl = link.absUrl("href");
+                pdfUrl = link.absUrl("href");
             }
         }
         return pdfUrl;}
@@ -53,7 +49,7 @@ public class RallyService {
     public String readPdf(String competitionName) throws Exception {
         String pdfUrl = this.getCompetition(competitionName);
         try (InputStream input = URI.create(pdfUrl).toURL().openStream();
-                PDDocument document = PDDocument.load(input)) {
+             PDDocument document = PDDocument.load(input)) {
             ObjectExtractor oe = new ObjectExtractor(document);
             Page page = oe.extract(1);
             SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
@@ -82,17 +78,17 @@ public class RallyService {
                 LOGGER.log(Level.SEVERE, "An error occurred", e);
             }
             return content.toString();
-            
+
         }
     }
 
-    public List<RallyClassificationDTO> getClassification(String competitionName, String type) throws Exception {
+    public List<VelocityClassificationDTO> getClassification(String competitionName, String type) throws Exception {
         String content = this.readPdf(competitionName);
-        List<RallyClassificationDTO> result = new ArrayList<>();
+        List<VelocityClassificationDTO> result = new ArrayList<>();
 
         Document doc = Jsoup.parse(content);
         Elements rows = doc.select("table tr");
-        
+
         List<Element> driverRows = rows.subList(2, rows.size());
 
         for (Element row : driverRows) {
@@ -105,15 +101,15 @@ public class RallyService {
             String name = cols.get(2).text().trim();
             int total = Integer.parseInt(cols.get(3).text().replaceAll("\\D","").trim());
 
-     
+
 
             List<StagePointsDTO> stage = new ArrayList<>();
             if(type.equals("abs")){
                 for (int i = 4, stageNumber = 1; i  < cols.size(); i += 4, stageNumber++) {
-                String powerStage = cols.get(i+1).text().trim();
-                String generalFinal = cols.get(i +3).text().trim();
+                    String powerStage = cols.get(i+1).text().trim();
+                    String generalFinal = cols.get(i +3).text().trim();
 
-                stage.add(new StagePointsDTO( powerStage, generalFinal));
+                    stage.add(new StagePointsDTO( powerStage, generalFinal));
                 }
             }else {
                 for (int i = 4, stageNumber = 1; i  < cols.size(); i += 2 , stageNumber++) {
@@ -124,10 +120,9 @@ public class RallyService {
             }
 
 
-            result.add(new RallyClassificationDTO(position, number, name, total, stage));
+            result.add(new VelocityClassificationDTO(position, number, name, total, null,null));
         }
         return result;
     }
-    
 
-    }
+}
